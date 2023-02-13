@@ -1,6 +1,6 @@
-﻿namespace NebulaCLI.Models;
+﻿namespace Nebula.CLI.Core.Models;
 
-internal class CommandParam
+public class CommandParam
 {
     public string? ParamName { get; set; }
     public string? Value { get; set; }
