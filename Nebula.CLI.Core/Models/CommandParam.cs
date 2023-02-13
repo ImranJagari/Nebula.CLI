@@ -1,4 +1,7 @@
-﻿namespace Nebula.CLI.Core.Models;
+﻿using System;
+using System.Data.Common;
+
+namespace Nebula.CLI.Core.Models;
 
 public class CommandParam
 {

@@ -1,12 +1,15 @@
-﻿using Nebula.CLI.Core.Interfaces;
+﻿using Nebula.CLI.Core.Attributes;
+using Nebula.CLI.Core.Interfaces;
 using Nebula.CLI.Core.Models;
+using System.Collections.Concurrent;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace Nebula.CLI.Services;
 
 public sealed partial class SubCommandService
 {
-	private IDictionary<string, ISubCommand> _subCommands = new Dictionary<string, ISubCommand>();
+	private IDictionary<string, ISubCommand> _subCommands = new ConcurrentDictionary<string, ISubCommand>();
 
 	public SubCommandService()
 	{
@@ -16,6 +19,14 @@ public sealed partial class SubCommandService
 	private void Initialize()
 	{
 		_subCommands.Clear();
+		var subCommandTypes = from type in Assembly.GetExecutingAssembly().GetTypes()
+							  where type.IsAssignableTo(typeof(ISubCommand))
+							  let attribute = type.GetCustomAttribute<CommandNameAttribute>()
+							  where attribute is not null
+							  select (attribute.Name, type);
+
+		subCommandTypes.AsParallel()
+					   .ForAll(_ => _subCommands!.TryAdd(_.Name, Activator.CreateInstance(_.type) as ISubCommand));
 	}
 
 	public void InvokeSubCommand(params string[] commandParameters)
@@ -27,6 +38,7 @@ public sealed partial class SubCommandService
 		}
 
 		var commandParams = GetCommandParams(commandParameters);
+
 	}
 
 	private static IEnumerable<CommandParam> GetCommandParams(string[] commandParameters)
