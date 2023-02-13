@@ -4,7 +4,7 @@ namespace Nebula.CLI.Core.Interfaces;
 
 public interface ISubCommand
 {
-    void Initialize(params CommandParam[] commandParams);
+	void Initialize();
 
-    void Handle();
+	void Handle();
 }

@@ -3,15 +3,9 @@
 namespace Nebula.CLI.Core.Attributes;
 
 [AttributeUsage(AttributeTargets.Property)]
-public class ParameterAttribute<T> : Attribute
+public class ParameterAttribute : Attribute
 {
-    public string ParameterName { get; set; }
-
-    public T? DefaultValue { get; set; }
-
-    public ParameterAttribute(string parameterName, T? defaultValue = default)
-    {
-        ParameterName = parameterName;
-        DefaultValue = defaultValue;
-    }
+	public string Name { get; set; } = string.Empty;
+	public bool Mandatory { get; set; }
+	public object? DefaultValue { get; set; }
 }

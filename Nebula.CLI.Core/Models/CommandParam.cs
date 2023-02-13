@@ -2,6 +2,6 @@
 
 public class CommandParam
 {
-    public string? ParamName { get; set; }
-    public string? Value { get; set; }
+	public string? ParamName { get; set; }
+	public string? Value { get; set; }
 }
